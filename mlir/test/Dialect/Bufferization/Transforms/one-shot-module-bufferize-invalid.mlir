@@ -143,3 +143,11 @@ func.func @non_memref_elem_type() -> tensor<1x!quant.uniform<i8:f32, 1.0>> {
   %t = tensor.empty() : tensor<1x!quant.uniform<i8:f32, 1.0>>
   return %t : tensor<1x!quant.uniform<i8:f32, 1.0>>
 }
+
+// -----
+
+func.func @to_buffer_cast_incompatible(%arg1: tensor<*xi64>) -> memref<*xi64, 1> {
+  // expected-error @below{{expected that types are cast compatible}}
+  %1 = bufferization.to_buffer %arg1 : tensor<*xi64> to memref<*xi64, 1>
+  return %1 : memref<*xi64, 1>
+}
